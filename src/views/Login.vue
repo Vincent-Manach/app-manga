@@ -4,16 +4,26 @@
       <ion-toolbar>
         <ion-button router-link="/home">Home</ion-button>
         <ion-button router-link="/mangas">Mangas</ion-button>
-        <!-- <ion-button router-link="/login">Login</ion-button> -->
+        <ion-button router-link="/login">Login</ion-button>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">    
       <div id="container">
-        <!-- <strong>Welcome to Manga Manach</strong>
-        <p>(Nom provisoire)</p> -->
-
-        <ion-button router-link="/mangas">Voir les mangas</ion-button>
+        <div class="logo">
+          <!-- <img src="../../../public/assets/img/logotest.png" alt="logo"> -->
+        </div>
+        <div id="login">
+          <h1>Le nom de l'app</h1>
+          <h2>Connectez-vous</h2>
+          <div id="logPart">
+            <input type="text" name="username" id="username" placeholder="USERNAME">
+            <br/><br/>
+            <input type="password" name="password" id="password" placeholder="PASSWORD">
+            <br/><br/>
+            <!-- <button v-on:click="checkAuth()" id="logBtn">SE CONNECTER</button> -->
+          </div>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -22,6 +32,7 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonToolbar, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
+// import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
@@ -31,8 +42,18 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton
+  },
+  methods: {
+    // checkAuth() {
+    //   var currentUsername = username.value;
+    //   var currentPassword = password.value;
+    // }
   }
 });
+
+// const username = document.getElementById('username') as HTMLInputElement;
+// const password = document.getElementById('password') as HTMLInputElement;
+
 </script>
 
 <style scoped>
@@ -44,7 +65,7 @@ ion-toolbar {
 
 #container {
   text-align: center;
-  background: white;
+  
   position: absolute;
   left: 0;
   right: 0;

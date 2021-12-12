@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Manga-Manach",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

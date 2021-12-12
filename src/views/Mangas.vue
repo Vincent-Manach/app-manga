@@ -8,12 +8,10 @@
       </ion-toolbar>
     </ion-header>
     
-    <ion-content :fullscreen="true">    
+    <ion-content :fullscreen="false">    
       <div id="container">
-        <!-- <strong>Welcome to Manga Manach</strong>
-        <p>(Nom provisoire)</p> -->
-
-        <ion-button router-link="/mangas">Voir les mangas</ion-button>
+        <strong>Hello there ! There is so mangas</strong>
+        <MangasList />
       </div>
     </ion-content>
   </ion-page>
@@ -23,14 +21,17 @@
 import { IonContent, IonHeader, IonPage, IonToolbar, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
 
+import MangasList from '@/components/mangas/MangasList.vue'
+
 export default defineComponent({
-  name: 'Home',
+  name: 'Mangas',
   components: {
     IonContent,
     IonHeader,
     IonPage,
     IonToolbar,
-    IonButton
+    IonButton,
+    MangasList
   }
 });
 </script>
@@ -38,17 +39,17 @@ export default defineComponent({
 <style scoped>
 
 ion-toolbar {
-  display: flex;
-  text-align: center;
+    display: flex;
+    text-align: center;
 }
 
 #container {
   text-align: center;
-  background: white;
+  background-color: black;
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
+  top: 200%;
   transform: translateY(-50%);
 }
 
