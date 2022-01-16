@@ -3,6 +3,9 @@ import { RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
 import Mangas from '../views/Mangas.vue';
 import Login from '../views/Login.vue';
+import Lists from '../views/Lists.vue';
+import List from '../views/List.vue';
+import Profile from '../views/Profile.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,9 +23,24 @@ const routes: Array<RouteRecordRaw> = [
     component: Mangas
   },
   {
+    path: '/myLists',
+    name: 'Lists',
+    component: Lists
+  },
+  {
+    path: '/myLists/:id',
+    name: 'List',
+    component: List
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   }
 ]
 

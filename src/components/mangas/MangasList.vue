@@ -1,15 +1,20 @@
 <template>
   <div class="showList">
-    <id-mangas v-for="manga in mangas" :key="manga.id" :manga="manga"></id-mangas>
+    <!-- <ion-slides pager="true" :options="slideOpts">
+      <ion-slide> -->
+        <id-mangas v-for="manga in mangas" :key="manga.id" :manga="manga"></id-mangas>
+      <!-- </ion-slide>
+    </ion-slides>   -->
   </div>
 </template>
 
 <script>
-import IdMangas from "@/components/mangas/IdMangas.vue"
-import axios from 'axios'
+import IdMangas from "@/components/mangas/IdMangas.vue";
+// import { IonSlides, IonSlide } from '@ionic/vue';
+import axios from 'axios';
 
 export default {
-  name: 'MangaList',
+  name: 'MangasList',
   data () {
     return {
       mangas: []
@@ -17,7 +22,9 @@ export default {
     }
   },
   components: {
-    'id-mangas': IdMangas
+    'id-mangas': IdMangas,
+    // IonSlides,
+    // IonSlide
   },
   methods: {
     // async fetchData () {

@@ -1,38 +1,63 @@
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-button router-link="/home">Home</ion-button>
-        <ion-button router-link="/mangas">Mangas</ion-button>
-        <!-- <ion-button router-link="/login">Login</ion-button> -->
-      </ion-toolbar>
-    </ion-header>
-    
+  <ion-page>    
     <ion-content :fullscreen="false">    
       <div id="container">
-        <strong>Hello there ! There is so mangas</strong>
-        <MangasList />
+        <strong>Hello there ! There is some mangas</strong>
+        <MangasList/>
+
+        <!-- <ion-slides pager="true" :options="slideOpts">
+          <ion-slide>
+            <h1>Slide 1</h1>
+          </ion-slide>
+          <ion-slide>
+            <h1>Slide 2</h1>
+          </ion-slide>
+          <ion-slide>
+            <h1>Slide 3</h1>
+          </ion-slide>
+          <ion-slide>
+            <h1>Slide 4</h1>
+          </ion-slide>
+          <ion-slide>
+            <h1>Slide 5</h1>
+          </ion-slide>
+          <ion-slide>
+            <h1>Slide 6</h1>
+          </ion-slide>
+        </ion-slides> -->
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar, IonButton } from '@ionic/vue';
+import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 
-import MangasList from '@/components/mangas/MangasList.vue'
+import MangasList from '@/components/mangas/MangasList.vue';
+
 
 export default defineComponent({
   name: 'Mangas',
   components: {
     IonContent,
-    IonHeader,
+    // IonHeader,
     IonPage,
-    IonToolbar,
-    IonButton,
-    MangasList
-  }
+    // IonToolbar,
+    // IonButton,
+    MangasList,
+    // IonSlides,
+    // IonSlide
+  },
+  // setup() {
+  //   // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
+  //   const slideOpts = {
+  //     initialSlide: 0,
+  //     slidesPerView: 3,
+  //     speed: 400
+  //   };
+  //   return { slideOpts }
+  // }
 });
 </script>
 
@@ -46,11 +71,10 @@ ion-toolbar {
 #container {
   text-align: center;
   background-color: black;
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  top: 200%;
-  transform: translateY(-50%);
+  padding-top: 100px;
 }
 
 #container strong {

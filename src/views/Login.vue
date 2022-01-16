@@ -1,13 +1,7 @@
+@ts-nocheck
+
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-button router-link="/home">Home</ion-button>
-        <ion-button router-link="/mangas">Mangas</ion-button>
-        <ion-button router-link="/login">Login</ion-button>
-      </ion-toolbar>
-    </ion-header>
-    
+  <ion-page>    
     <ion-content :fullscreen="true">    
       <div id="container">
         <div class="logo">
@@ -17,11 +11,14 @@
           <h1>Le nom de l'app</h1>
           <h2>Connectez-vous</h2>
           <div id="logPart">
-            <input type="text" name="username" id="username" placeholder="USERNAME">
-            <br/><br/>
-            <input type="password" name="password" id="password" placeholder="PASSWORD">
-            <br/><br/>
-            <!-- <button v-on:click="checkAuth()" id="logBtn">SE CONNECTER</button> -->
+            <form action="">
+              <input type="text" v-model="username" placeholder="USERNAME">
+              <br/><br/>
+              <input type="password" v-model="password" placeholder="PASSWORD">
+              <br/><br/>
+              <ion-button class="light" @click="checkAuth" id="logBtn">SE CONNECTER</ion-button><br/><br/>
+              <span id="errorLog">{{ errorLog }}</span>
+            </form>
           </div>
         </div>
       </div>
@@ -30,29 +27,89 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar, IonButton } from '@ionic/vue';
+import { IonContent, IonPage, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
-// import axios from 'axios';
+import axios from 'axios';
+import jwtDecode from "jwt-decode";
 
 export default defineComponent({
-  name: 'Home',
+  name: 'Login',
+  data() {
+    return {
+      login: [],
+      username: null,
+      password: null,
+      errorLog: '',
+      logged: false,
+    }
+  },
   components: {
     IonContent,
-    IonHeader,
+    // IonHeader,
     IonPage,
-    IonToolbar,
+    // IonToolbar,
     IonButton
   },
   methods: {
-    // checkAuth() {
-    //   var currentUsername = username.value;
-    //   var currentPassword = password.value;
-    // }
+    async checkToken() {
+      const token = localStorage.getItem('token')
+      await axios.get('https://api.mangadex.org/auth/check', {
+        headers: {
+          'Authorization':`Bearer ${token}`
+        }
+      })
+      .then(res => {
+          console.log(res.data.isAuthenticated);
+          if (res.data.isAuthenticated == true) {
+            this.logged = true
+            this.refreshToken()
+          } else {
+            this.logged = false
+          }
+      })
+      .catch(err => {
+          console.error(err);
+      });
+    },
+
+    async checkAuth() {
+      
+      await axios.post('https://api.mangadex.org/auth/login', {
+          username: this.username,
+          password: this.password
+      })
+      .then( res => {
+        const tokenUser = res.data.token.session
+        const jwtToken = jwtDecode(tokenUser)
+
+        console.log(jwtToken)
+
+
+        localStorage.setItem('token', tokenUser)
+        console.log(localStorage.getItem('token'))
+        this.$router.push('/home');
+        this.checkToken()
+      })
+      .catch(err => {
+        console.log(err)
+        this.errorLog = 'Your crendentials are invalid. Please try again'
+      }) 
+    },
+
+    async refreshToken() {
+        const token = localStorage.getItem('token')
+        await axios.post('https://api.mangadex.org/auth/refresh', {
+          headers: token
+        })
+        .then( res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        }) 
+    }
   }
 });
-
-// const username = document.getElementById('username') as HTMLInputElement;
-// const password = document.getElementById('password') as HTMLInputElement;
 
 </script>
 

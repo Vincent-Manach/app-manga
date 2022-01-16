@@ -1,29 +1,30 @@
 <template>
   <ion-page>    
-    <ion-content :fullscreen="true">    
+    <ion-content :fullscreen="false">    
       <div id="container">
         <!-- <strong>Welcome to Manga Manach</strong>
         <p>(Nom provisoire)</p> -->
 
-        <ion-button router-link="/mangas">Voir les mangas</ion-button>
+        <p>Ta liste</p>
+        <IdList/>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonButton } from '@ionic/vue';
+import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
-
+import IdList from '@/components/list/IdList.vue';
 
 export default defineComponent({
-  name: 'Home',
+  name: 'List',
   components: {
     IonContent,
     // IonHeader,
     IonPage,
+    IdList,
     // IonToolbar,
-    IonButton,
   }
 });
 </script>
