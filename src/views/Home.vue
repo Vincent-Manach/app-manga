@@ -1,6 +1,6 @@
 <template>
   <ion-page>    
-    <ion-content :fullscreen="true">    
+    <ion-content :fullscreen="false">    
       <div id="container">
         <!-- <strong>Welcome to Manga Manach</strong>
         <p>(Nom provisoire)</p> -->
@@ -20,11 +20,19 @@ export default defineComponent({
   name: 'Home',
   components: {
     IonContent,
-    // IonHeader,
     IonPage,
-    // IonToolbar,
     IonButton,
-  }
+  },
+  methods: {
+    // refreshPage() {
+    //   let executed = false;
+    //   if (!executed && localStorage.getItem('log') == 'logged') {
+    //     executed = true;
+    //     console.log('hello')
+    //     window.location.reload()
+    //   }
+    // }
+  },
 });
 </script>
 

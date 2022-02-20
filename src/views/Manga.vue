@@ -2,8 +2,8 @@
   <ion-page>    
     <ion-content :fullscreen="false">    
       <div id="container">
-        <strong>Hello there ! There is some mangas</strong>
-        <MangasList/>
+        <strong>Ton manga</strong>
+        <IdManga/>
 
       </div>
     </ion-content>
@@ -14,18 +14,18 @@
 import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 
-import MangasList from '@/components/mangas/MangasList.vue';
+import IdManga from '@/components/manga/IdManga.vue';
 
 
 export default defineComponent({
-  name: 'Mangas',
+  name: 'Manga',
   components: {
     IonContent,
     // IonHeader,
     IonPage,
     // IonToolbar,
     // IonButton,
-    MangasList,
+    IdManga,
   }
 });
 </script>

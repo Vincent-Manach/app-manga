@@ -1,28 +1,27 @@
 <template>
   <div class="showList">
-    <ion-slides pager="true" :options="slideOpts">
-        <id-mangas v-for="manga in mangas" :key="manga.id" :manga="manga"></id-mangas>
-    </ion-slides>
+      <ion-slides pager="true" :options="slideOpts">
+        <id-followed-mangas v-for="followedManga in followedMangas" :key="followedManga.id" :followedManga="followedManga"></id-followed-mangas>
+      </ion-slides> 
   </div>
 </template>
 
 <script>
-import IdMangas from "@/components/mangas/IdMangas.vue";
+import IdFollowedMangas from "@/components/followedMangas/IdFollowedMangas.vue";
 import { IonSlides } from '@ionic/vue';
 import axios from 'axios';
 
 export default {
-  name: 'MangasList',
+  name: 'FollowedMangasList',
   data () {
     return {
-      mangas: []
-      // mangasChap: []
+      followedMangas: [],
+      countData: []
     }
   },
   components: {
-    'id-mangas': IdMangas,
-    IonSlides,
-    // IonSlide
+    'id-followed-mangas': IdFollowedMangas,
+    IonSlides
   },
   setup() {
     // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
@@ -46,25 +45,26 @@ export default {
     //   this.mangas = res.data
     //   console.log(this.mangas+'desf')
     // }
+
+    async fetchData() {
+      const token = localStorage.getItem('token')
+      await axios.get('https://api.mangadex.org/user/follows/manga', {
+        headers: {
+          'Authorization':`Bearer ${token}`
+        }
+      })
+      .then(res => {
+          this.followedMangas = res.data.data
+          this.countData = res.data
+      })
+      .catch(err => {
+          console.error(err);
+      });
+    }
   },
   mounted () {
-    // this.fetchData()
-
-    axios.get('https://api.mangadex.org/manga/', {
-      params: {
-        limit: 5
-      }
-    })
-    .then(resp => {
-        // console.log(resp.data.data);
-        this.mangas = resp.data.data
-        console.log(this.mangas);
-    })
-    .catch(err => {
-        // Handle Error Here
-        console.error(err);
-    });
-
+    this.fetchData()
+    
 
     // axios.get('https://api.mangadex.org/manga/{id}/aggregate', {
     //   params: {
@@ -85,6 +85,9 @@ export default {
 </script>
 
 <style scoped>
+ion-slides {
+  padding: 20px 20px 30px 20px;
+}
 .showList {
     margin-top: 0px;
 }

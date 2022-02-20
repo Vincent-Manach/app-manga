@@ -1,16 +1,29 @@
 <template>
-  <div class="id-card">
+  <!-- <div class="id-card">
+    <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" alt="">
     <h2> {{ manga.attributes.title.en }} </h2>
     <h3>Description :</h3>
     <p> {{ manga.attributes.description.en }} </p>
     <br>
     <p><strong>Status</strong> : {{ manga.attributes.status }}</p>
-    <h1>TEEEEEST</h1>
-    <p></p>
-  </div>
+  </div> -->
+  <router-link :to="{ path: `/manga/${manga.id}` }">
+    <ion-slide>
+      <ion-card>
+        <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" />
+        <ion-card-header>
+          <ion-card-subtitle>{{ manga.id }}</ion-card-subtitle>
+          <ion-card-title>{{ manga.attributes.title.en }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>{{ hideDesc }}</ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </router-link>
 </template>
 
 <script>
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonSlide } from '@ionic/vue';
+import axios from 'axios';
 
 export default {
   
@@ -18,6 +31,40 @@ export default {
     manga: {
       type: Object,
       required: true,
+    }
+  },
+  components: {
+    IonCard, 
+    IonCardHeader, 
+    IonCardSubtitle, 
+    IonCardTitle, 
+    IonCardContent, 
+    IonSlide
+  },
+  data() {
+    return {
+      coverId: this.manga.relationships[2].id,
+      coverName: '',
+      hideDesc: '',
+      description: this.manga.attributes.description.en
+    }
+  },
+  mounted() {
+    axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
+    .then(resp => {
+        // console.log(resp.data.data);
+        this.coverName = resp.data.data.attributes.fileName
+        console.log(this.coverName);
+    })
+    .catch(err => {
+        // Handle Error Here
+        console.error(err);
+    });
+
+    if (this.description.length > 250) {
+        this.hideDesc = this.description.substring(0, 250) + '...';
+    } else {
+        this.hideDesc = this.description;
     }
   }
 }

@@ -2,7 +2,6 @@
     <router-link :to="{ path: `/myLists/${list.id}` }">
       <h2>{{ list.attributes.name }}</h2>
       <p>{{ list.id }}</p>
-      <h1>TEEEEEST</h1>
     </router-link>
 </template>
 

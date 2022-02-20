@@ -12,9 +12,9 @@
           <h2>Connectez-vous</h2>
           <div id="logPart">
             <form action="">
-              <input type="text" v-model="username" placeholder="USERNAME">
+              <input type="text" autocomplete="username" v-model="username" placeholder="username">
               <br/><br/>
-              <input type="password" v-model="password" placeholder="PASSWORD">
+              <input type="password" autocomplete="current-password" v-model="password" placeholder="password">
               <br/><br/>
               <ion-button class="light" @click="checkAuth" id="logBtn">SE CONNECTER</ion-button><br/><br/>
               <span id="errorLog">{{ errorLog }}</span>
@@ -40,7 +40,6 @@ export default defineComponent({
       username: null,
       password: null,
       errorLog: '',
-      logged: false,
     }
   },
   components: {
@@ -51,27 +50,40 @@ export default defineComponent({
     IonButton
   },
   methods: {
-    async checkToken() {
-      const token = localStorage.getItem('token')
-      await axios.get('https://api.mangadex.org/auth/check', {
-        headers: {
-          'Authorization':`Bearer ${token}`
-        }
-      })
-      .then(res => {
-          console.log(res.data.isAuthenticated);
-          if (res.data.isAuthenticated == true) {
-            this.logged = true
-            this.refreshToken()
-          } else {
-            this.logged = false
-          }
-      })
-      .catch(err => {
-          console.error(err);
-      });
-    },
+    // async checkToken() {
+    //   const token = localStorage.getItem('token')
+    //   await axios.get('https://api.mangadex.org/auth/check', {
+    //     headers: {
+    //       'Authorization':`Bearer ${token}`
+    //     }
+    //   })
+    //   .then(res => {
+    //       console.log(res.data.isAuthenticated);
+    //       if (res.data.isAuthenticated == true) {
 
+    //         this.refreshToken()
+    //       } else {
+    //       }
+    //   })
+    //   .catch(err => {
+    //       console.error(err);
+    //   });
+    // },
+
+    // async refreshToken() {
+    //   const token = localStorage.getItem('token')
+    //   await axios.get('https://api.mangadex.org/auth/refresh', {
+    //     headers: {
+    //       'Authorization':`Bearer ${token}`
+    //     }
+    //   })
+    //   .then( res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   }) 
+    // },
     async checkAuth() {
       
       await axios.post('https://api.mangadex.org/auth/login', {
@@ -79,35 +91,29 @@ export default defineComponent({
           password: this.password
       })
       .then( res => {
+        this.errorLog = '';
         const tokenUser = res.data.token.session
         const jwtToken = jwtDecode(tokenUser)
+        // const userId = jwtToken.test
 
         console.log(jwtToken)
 
-
         localStorage.setItem('token', tokenUser)
         console.log(localStorage.getItem('token'))
-        this.$router.push('/home');
-        this.checkToken()
+        localStorage.setItem('log', 'LogOn')
+        console.log(localStorage.getItem('log'))
+        // localStorage.setItem('userId', userId)
+        // console.log(localStorage.getItem('userId'))
+        this.$router.push({ path: '/home' })
+        // this.$router.push('/home');
+        // window.location.reload();
+        // this.refreshToken()
       })
       .catch(err => {
         console.log(err)
         this.errorLog = 'Your crendentials are invalid. Please try again'
       }) 
     },
-
-    async refreshToken() {
-        const token = localStorage.getItem('token')
-        await axios.post('https://api.mangadex.org/auth/refresh', {
-          headers: token
-        })
-        .then( res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        }) 
-    }
   }
 });
 

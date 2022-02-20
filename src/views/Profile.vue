@@ -6,7 +6,7 @@
         <p>(Nom provisoire)</p> -->
         <ion-item>
           <ion-label>
-            Item {{ user.attributes }}
+            {{ username }}
           </ion-label>
         </ion-item>
         <ion-item>
@@ -16,12 +16,19 @@
           </ion-button>
         </ion-label>
         </ion-item>
+
+        <h1 class="title" >Followed Mangas </h1>
+        <FollowedMangasList/>
+        <br>
+        <ListsList/>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
+import FollowedMangasList from '@/components/followedMangas/FollowedMangasList.vue';
+import ListsList from '@/components/lists/ListsList.vue';
 import { IonContent, IonPage, IonItem, IonButton, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
@@ -31,11 +38,14 @@ export default defineComponent({
   name: 'Profile',
   data() {
     return {
-      // logged: true,
       user: [],
+      username: '',
+      userId: '',
     }
   },
   components: {
+    FollowedMangasList,
+    ListsList,
     IonContent,
     // IonHeader,
     IonPage,
@@ -56,39 +66,34 @@ export default defineComponent({
         console.log(res)
         if (res.data.result === 'ok') {
           localStorage.removeItem('token')
-          // this.logged = fals
+          localStorage.removeItem('log')
+          this.$router.push('/home');
+          console.log(localStorage.getItem('token'), localStorage.getItem('log'))
         }
       })
       .catch(err => {
         console.log(err)
-      }) 
-
-      // this.$router.push('/home');
-      // .then(res => {
-      //   this.login = res.data.data
-      //     console.log('it works ' + res.data.token.session);
-      // })
-      // .catch(err => {
-      //     // Handle Error Here
-      //     console.error('no no no' + err);
-      // })
-    }
+      })
+    },
   },
   mounted() {
     const token = localStorage.getItem('token')
-    axios.get('https://api.mangadex.org/user/me', {
-      headers: {
-        'Authorization':`Bearer ${token}`
-      }
-    })
-    .then(res => {
-        console.log(res.data);
-        this.user = res.data.data
-        console.log(this.user)
-    })
-    .catch(err => {
-        console.error(err);
-    });
+    console.log(token)
+    if(token) {
+      axios.get('https://api.mangadex.org/user/me', {
+        headers: {
+          'Authorization':`Bearer ${token}`
+        }
+      })
+      .then(res => {
+          this.user = res.data.data
+          this.username = res.data.data.attributes.username
+          this.userId = res.data.data.id
+      })
+      .catch(err => {
+          console.error(err);
+      });
+    }
   }
 });
 </script>
@@ -100,6 +105,9 @@ ion-toolbar {
   text-align: center;
 }
 
+.title {
+  color: black;
+}
 #container {
   text-align: center;
   background: white;

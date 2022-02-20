@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
 import Mangas from '../views/Mangas.vue';
+import Manga from '../views/Manga.vue';
 import Login from '../views/Login.vue';
 import Lists from '../views/Lists.vue';
 import List from '../views/List.vue';
 import Profile from '../views/Profile.vue';
+import Search from '../views/Search.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/mangas',
     name: 'Mangas',
     component: Mangas
+  },
+  {
+    path: '/manga/:id',
+    name: 'Manga',
+    component: Manga
   },
   {
     path: '/myLists',
@@ -41,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
   }
 ]
 
