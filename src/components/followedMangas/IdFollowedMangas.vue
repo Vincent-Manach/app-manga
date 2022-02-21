@@ -5,8 +5,9 @@
     <p> {{ followedManga.id }} </p>
     <h1>TEEEEEST</h1>
   </div> -->
-
+  
     <ion-slide>
+      <router-link :to="{ path: `/manga/${followedManga.id}` }">
       <ion-card>
         <img v-bind:src="'https://uploads.mangadex.org/covers/'+followedManga.id+'/'+coverName" />
         <ion-card-header>
@@ -25,7 +26,9 @@
       </ion-select>
       <ion-button @click="updateStatus">Update status</ion-button>
       </ion-card>
+      </router-link>
     </ion-slide>
+  
 </template>
 
 <script>
