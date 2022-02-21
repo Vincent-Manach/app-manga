@@ -30,7 +30,7 @@ export default {
     return {
       manga: [],
       mangaStatus: '',
-      coverName: '',
+      // coverName: '',
     }
   },
   components: {
@@ -102,15 +102,15 @@ export default {
       this.fetchData();
       this.fetchStatus();
 
-      axios.get(`https://api.mangadex.org/cover/${this.manga.relationships[2].id}`)
-      .then(resp => {
-          // console.log(resp.data.data);
-          this.coverName = resp.data.data.attributes.fileName
-      })
-      .catch(err => {
-          // Handle Error Here
-          console.error(err);
-      });
+      // axios.get(`https://api.mangadex.org/cover/${this.manga.relationships[2].id}`)
+      // .then(resp => {
+      //     // console.log(resp.data.data);
+      //     this.coverName = resp.data.data.attributes.fileName
+      // })
+      // .catch(err => {
+      //     // Handle Error Here
+      //     console.error(err);
+      // });
     }
   }
 </script>
