@@ -25,9 +25,9 @@
     </ion-header>
 </template> -->
 <template>
-
+  <!-- <div id="headerCard"> -->
 <!--Floating buttons -->
-  <ion-fab vertical="start" horizontal="start">
+  <!-- <ion-fab vertical="start" horizontal="start">
     <ion-fab-button>
       <ion-icon id="settingsIcon" :icon="settingsOutline"></ion-icon>
     </ion-fab-button>
@@ -35,50 +35,51 @@
       <ion-fab-button><ion-icon :icon="logoTwitter"></ion-icon></ion-fab-button>
       <ion-fab-button><ion-icon :icon="logoInstagram"></ion-icon></ion-fab-button>
     </ion-fab-list>
-  </ion-fab>
+  </ion-fab> -->
+
+  <h1>Mang'App</h1>
 
   <ion-fab id="profileFab" vertical="start" horizontal="end">
     <ion-fab-button tab="login" href="/login">
-      <ion-icon :icon="personCircleOutline"></ion-icon>
+      <ion-icon v-if="logged == false" :icon="logInOutline"></ion-icon>
+      <ion-icon v-if="logged == true" :icon="logOutOutline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab id="profileFab" vertical="start" horizontal="end">
+  <!-- <ion-fab id="profileFab" vertical="start" horizontal="end">
     <ion-fab-button tab="login" href="/login">
       <ion-icon :icon="personCircleOutline"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
 <!--Bottom nav -->
   <ion-tabs>
     <ion-router-outlet></ion-router-outlet>
     <ion-tab-bar>
       <ion-tab-button tab="home" href="/home">
-        <img src="../../public/assets/img/home.svg" width="32"/>
+        <ion-icon :icon="homeOutline"></ion-icon>
         <ion-label>Home</ion-label>
       </ion-tab-button>
       <ion-tab-button tab="search" href="/search">
         <ion-icon :icon="searchOutline"></ion-icon>
         <ion-label>Search</ion-label>
       </ion-tab-button>
-      <ion-tab-button v-if="logged" tab="profile" href="/profile">
-        <img src="../../public/assets/img/profile.svg" width="35"/>
+      <ion-tab-button v-if="logged == true" tab="profile" href="/profile">
+        <ion-icon :icon="personCircleOutline"></ion-icon>
         <ion-label>Profile</ion-label>
       </ion-tab-button>
       <!-- <ion-tab-button tab="lists" href="/mylists">
         <img src="../../public/assets/img/lists.svg" width="30"/>
         <ion-label>My Lists</ion-label>
       </ion-tab-button> -->
-      <ion-tab-button tab="login" href="/login">
-        <img src="../../public/assets/img/profile.svg" width="35"/>
-        <ion-label>Login</ion-label>
-      </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
-import { IonTabs, IonTabBar, IonTabButton, IonLabel, IonFab, IonFabButton, IonFabList, IonRouterOutlet, IonIcon } from '@ionic/vue';
+import { IonTabs, IonTabBar, IonTabButton, IonLabel, IonFab, IonFabButton, IonRouterOutlet, IonIcon } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { useUserStore } from '@/stores/user.store';
 // import axios from 'axios';
 
 import {
@@ -88,17 +89,30 @@ import {
   logoVimeo,
   personCircleOutline,
   searchOutline,
-  settingsOutline,
+  homeOutline,
+  logInOutline,
+  logOutOutline,
+  // settingsOutline,
   share
 } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Header',
+  props: {
+    user: Object
+  },
   data() {
     return {
-      logged: true,
+      logged: false,
     }
   },
+  // watch: {
+  //   localStorage() {
+  //     if (localStorage.getItem('token')) {
+  //       this.logged == true
+  //     }
+  //   }
+  // },
   components: {
     IonTabs,
     IonLabel,
@@ -106,11 +120,12 @@ export default defineComponent({
     IonTabButton,
     IonFab, 
     IonFabButton, 
-    IonFabList,
+    // IonFabList,
     IonRouterOutlet,
     IonIcon
   },
   setup() {
+    const userStore = useUserStore();
     return {
       logoFacebook, 
       logoInstagram, 
@@ -118,8 +133,12 @@ export default defineComponent({
       logoVimeo, 
       personCircleOutline,
       searchOutline,
-      settingsOutline,
-      share
+      homeOutline,
+      logInOutline,
+      logOutOutline,
+      // settingsOutline,
+      share,
+      userStore
     }
   },
   methods: {
@@ -128,9 +147,6 @@ export default defineComponent({
     // }
   },
   mounted() {
-    if (localStorage.getItem('log') === 'LogOn') {
-      console.log(localStorage.getItem('log'))
-    }
     // axios.get('https://api.mangadex.org/auth/check', {
     //   headers: {
     //     'Authorization':`Bearer ${token}`
@@ -144,11 +160,22 @@ export default defineComponent({
     // .catch(err => {
     //     console.error(err);
     // });
+    window.addEventListener('localstorage-changed', () => {
+      if (localStorage.getItem('token')) {
+        this.logged = true
+      } else {
+        this.logged = false
+      }
+    });
+
   }
 });
 </script>
 
 <style scoped>
+/* #headerCard {
+  background-color: pink;
+} */
 ion-searchbar {
   padding: 8px 8px 8px 100px;
   z-index: 5;
@@ -174,6 +201,12 @@ ion-icon#settingsIcon {
 
 ion-tabs {
   z-index: 1 !important;
+}
+
+h1 {
+  z-index: 2;
+  text-align: center;
+
 }
 
 #container {

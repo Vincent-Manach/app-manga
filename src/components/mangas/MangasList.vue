@@ -88,4 +88,7 @@ export default {
 .showList {
     margin-top: 0px;
 }
+ion-slides {
+  padding: 20px 0;
+}
 </style>

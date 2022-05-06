@@ -1,26 +1,23 @@
 <template>
     <ion-card>
-      <!-- <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.data.id+'/'+coverName" /> -->
+      <img v-bind:src="'https://uploads.mangadex.org/covers/'+mangaId+'/'+coverName" />
       <ion-card-header>
-        <ion-card-subtitle>{{ manga.data }}</ion-card-subtitle>
-        <ion-card-title>{{ manga.data }}</ion-card-title>
+        <ion-card-title>{{ mangaTitle }}</ion-card-title>
+        <div class="detailsVol">
+          <p>Last Chapter : {{ mangaLastChap }}</p>
+          <p>Last Volume : {{ mangaLastVol }}</p>
+        </div>
+        
         <!-- <h3>Status : {{ mangaStatus }}</h3> -->
       </ion-card-header>
-      <ion-card-content>Desc</ion-card-content>
-      <ion-select :placeholder="mangaStatus">
-        <ion-select-option value="reading">Reading</ion-select-option>
-        <ion-select-option value="on_hold">On hold</ion-select-option>
-        <ion-select-option value="plan_to_read">Plan to read</ion-select-option>
-        <ion-select-option value="dropped">Dropped</ion-select-option>
-        <ion-select-option value="re_reading">Re reading</ion-select-option>
-        <ion-select-option value="completed">Completed</ion-select-option>
-      </ion-select>
-      <ion-button @click="updateStatus">Update status</ion-button>
+      <ion-card-content>{{ mangaDesc }}</ion-card-content>
+      <ion-button  @click="addFollow">Add</ion-button> 
+      <!-- v-if="logged == true" -->
     </ion-card>
 </template>
 
 <script>
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/vue';
 import axios from 'axios';
 
 export default {
@@ -29,78 +26,81 @@ export default {
   data () {
     return {
       manga: [],
-      mangaStatus: '',
-      // coverName: '',
+      mangaId: '', 
+      mangaTitle: '',
+      mangaDesc: '',
+      mangaLastVol: '',
+      mangaLastChap: '',
+      coverId: '',
+      coverName: '',
+      logged: false,
     }
   },
   components: {
     IonCard,
     IonCardHeader,
-    IonCardSubtitle,
     IonCardTitle,
     IonCardContent,
-    IonSelect,
-    IonSelectOption,
-    IonButton
+    IonButton,
   },
   methods: {
-      async fetchData () {
-        await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}`)
-        .then(resp => {
-            // console.log(resp.data.data);
-            this.manga = resp.data
-            console.log(this.manga);
-        })
-        .catch(err => {
-            // Handle Error Here
-            console.error(err);
-        });
-      },
-
-      async fetchStatus () {
-        const token = localStorage.getItem('token')
-        console.log(this.$route.params.id)
-        await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}/status`, {
-          headers: {
-            'Authorization':`Bearer ${token}`
-          }
-        })
-        .then(resp => {
-            console.log(resp.data.status)
-            this.mangaStatus = resp.data.status
-        })
-        .catch(err => {
-            // Handle Error Here
-            console.error(err);
-        });
-      },
-
-      async updateStatus () {
-        const token = localStorage.getItem('token');
-        const newStatus = document.querySelector('input[type="hidden"]').value;
-        console.log(newStatus);
-        const data = {
-          "status": `${newStatus}`
-        };
-
-        await axios.post(`https://api.mangadex.org/manga/${this.$route.params.id}/status`, data, {
-          headers: {
-            'Authorization':`Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(resp => {
-            console.log(resp);
-        })
-        .catch(err => {
-            // Handle Error Here
-            console.error(err);
-        });
-      }
+    async addFollow() {
+      const token = localStorage.getItem('token');
+      await axios.post(`https://api.mangadex.org/manga/${this.mangaId}/follow`, {
+        headers: {
+          'Authorization':`Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then( res => {
+          console.log(res)
+      })
+      .catch(err => {
+          console.log(err)
+      });
     },
+    async fetchData () {
+      await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}`)
+      .then(resp => {
+          // console.log(resp.data.data);
+          this.manga = resp.data
+          this.mangaId = resp.data.data.id
+          this.mangaTitle = resp.data.data.attributes.title.en
+          this.mangaDesc = resp.data.data.attributes.description.en
+          this.mangaLastChap = resp.data.data.attributes.lastChapter
+          this.mangaLastVol = resp.data.data.attributes.lastVolume
+          this.coverId = resp.data.data.relationships[2].id
+          console.log(this.manga);
+          this.fetchImg()
+      })
+      .catch(err => {
+          // Handle Error Here
+          console.error(err);
+      });
+    },
+
+    async fetchImg () {
+      await axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
+      .then(resp => {
+          // console.log(resp.data.data);
+          this.coverName = resp.data.data.attributes.fileName
+      })
+      .catch(err => {
+          // Handle Error Here
+          console.error(err);
+      });
+    },
+  },
     mounted () {
       this.fetchData();
-      this.fetchStatus();
+
+      window.addEventListener('localstorage-changed', () => {
+        if (localStorage.getItem('token')) {
+          this.logged = true
+        } else {
+          this.logged = false
+        }
+      });
 
       // axios.get(`https://api.mangadex.org/cover/${this.manga.relationships[2].id}`)
       // .then(resp => {
@@ -124,6 +124,30 @@ export default {
     border-radius: 15px;
     width: 300px;
     margin: 25px auto;
-    padding: 5px;
+    padding: 15px;
+  }
+  ion-card {
+    padding: 15px;
+  }
+  ion-card-title {
+    font-size: 26px;
+  }
+  .detailsVol {
+    display: flex;
+    justify-content: space-around;
+  }
+  .detailsVol p {
+    padding: 5px 10px;
+    background-color: orange;
+    border-radius: 3px;
+    color: white;
+    font-size: 16px;
+  }
+  ion-card-content {
+    color: white;
+  }
+  ion-select {
+    width: 150px;
+    margin: auto;
   }
 </style>

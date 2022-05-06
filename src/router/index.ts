@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
 import Mangas from '../views/Mangas.vue';
 import Manga from '../views/Manga.vue';
+import FollowedManga from '../views/FollowedManga.vue';
 import Login from '../views/Login.vue';
 import Lists from '../views/Lists.vue';
 import List from '../views/List.vue';
@@ -28,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/manga/:id',
     name: 'Manga',
     component: Manga
+  },
+  {
+    path: '/mangaFollowed/:id',
+    name: 'FollowedManga',
+    component: FollowedManga
   },
   {
     path: '/myLists',

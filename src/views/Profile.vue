@@ -2,25 +2,22 @@
   <ion-page>    
     <ion-content :fullscreen="true">    
       <div id="container">
-        <!-- <strong>Welcome to Manga Manach</strong>
-        <p>(Nom provisoire)</p> -->
         <ion-item>
           <ion-label>
             {{ username }}
           </ion-label>
-        </ion-item>
-        <ion-item>
-        <ion-label>
           <ion-button class="light" @click="logout">
             Se déconnecter
           </ion-button>
-        </ion-label>
         </ion-item>
-
-        <h1 class="title" >Followed Mangas </h1>
-        <FollowedMangasList/>
         <br>
-        <ListsList/>
+        <!-- <ion-item>
+        <ion-label>
+          
+        </ion-label>
+        </ion-item> -->
+        <FollowedMangasList />
+        <br>
       </div>
     </ion-content>
   </ion-page>
@@ -28,7 +25,7 @@
 
 <script lang="ts">
 import FollowedMangasList from '@/components/followedMangas/FollowedMangasList.vue';
-import ListsList from '@/components/lists/ListsList.vue';
+// import ListsList from '@/components/lists/ListsList.vue';
 import { IonContent, IonPage, IonItem, IonButton, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
@@ -41,11 +38,12 @@ export default defineComponent({
       user: [],
       username: '',
       userId: '',
+      result: false,
     }
   },
   components: {
     FollowedMangasList,
-    ListsList,
+    // ListsList,
     IonContent,
     // IonHeader,
     IonPage,
@@ -59,16 +57,19 @@ export default defineComponent({
       const token = localStorage.getItem('token')
       await axios.post('https://api.mangadex.org/auth/logout', {
         headers: {
-        'Authorization':`Bearer ${token}`
-      }
+          'Authorization':`Bearer ${token}`
+        }
       })
       .then( res => {
         console.log(res)
         if (res.data.result === 'ok') {
           localStorage.removeItem('token')
-          localStorage.removeItem('log')
-          this.$router.push('/home');
-          console.log(localStorage.getItem('token'), localStorage.getItem('log'))
+          window.dispatchEvent(new CustomEvent('localstorage-changed', {
+              detail: {
+                  storage: localStorage.removeItem('token')
+              }
+          }))
+          this.$router.push('/login');
         }
       })
       .catch(err => {
@@ -78,7 +79,6 @@ export default defineComponent({
   },
   mounted() {
     const token = localStorage.getItem('token')
-    console.log(token)
     if(token) {
       axios.get('https://api.mangadex.org/user/me', {
         headers: {
@@ -104,18 +104,13 @@ ion-toolbar {
   display: flex;
   text-align: center;
 }
-
-.title {
-  color: black;
-}
 #container {
   text-align: center;
   background: white;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  top: 150px;
+  width: 95%;
+  margin: auto;
 }
 
 #container strong {

@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <Header />
+    <Header :user="userStore.getUser"/>
     <ion-router-outlet />
   </ion-app>
 </template>
@@ -9,6 +9,8 @@
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Header from '@/components/Header.vue';
+import { useUserStore } from '@/stores/user.store';
+
 
 export default defineComponent({
   name: 'App',
@@ -16,6 +18,11 @@ export default defineComponent({
     IonApp,
     IonRouterOutlet,
     Header
-  }
+  },
+  setup() {
+    const userStore = useUserStore();
+    // userStore.getUser;
+    return { userStore };
+  },
 });
 </script>

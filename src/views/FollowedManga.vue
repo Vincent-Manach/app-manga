@@ -2,8 +2,9 @@
   <ion-page>    
     <ion-content :fullscreen="false">    
       <div id="container">
-        <!-- <ion-button router-link="/mangas">Voir les mangas</ion-button> -->
-        <MangasList/>
+        <strong>Ton manga</strong>
+        <IdFollowedManga/>
+
       </div>
     </ion-content>
   </ion-page>
@@ -13,45 +14,36 @@
 import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 
-import MangasList from '@/components/mangas/MangasList.vue';
+import IdFollowedManga from '@/components/manga/IdFollowedManga.vue';
+
 
 export default defineComponent({
-  name: 'Home',
+  name: 'FollowedManga',
   components: {
     IonContent,
+    // IonHeader,
     IonPage,
+    // IonToolbar,
     // IonButton,
-    MangasList,
-  },
-  methods: {
-    // refreshPage() {
-    //   let executed = false;
-    //   if (!executed && localStorage.getItem('log') == 'logged') {
-    //     executed = true;
-    //     console.log('hello')
-    //     window.location.reload()
-    //   }
-    // }
-  },
+    IdFollowedManga,
+  }
 });
 </script>
 
 <style scoped>
 
 ion-toolbar {
-  display: flex;
-  text-align: center;
+    display: flex;
+    text-align: center;
 }
 
 #container {
   text-align: center;
-  /* background: white; */
-  position: absolute;
+  background-color: black;
+  position: relative;
   left: 0;
   right: 0;
-  top: 150px;
-  /* top: 50%;
-  transform: translateY(-50%); */
+  padding-top: 100px;
 }
 
 #container strong {
@@ -62,7 +54,9 @@ ion-toolbar {
 #container p {
   font-size: 16px;
   line-height: 22px;
+  
   color: #8c8c8c;
+  
   margin: 0;
 }
 

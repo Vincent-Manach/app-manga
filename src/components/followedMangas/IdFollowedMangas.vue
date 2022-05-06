@@ -7,24 +7,15 @@
   </div> -->
   
     <ion-slide>
-      <router-link :to="{ path: `/manga/${followedManga.id}` }">
+      <router-link :to="{ path: `/mangaFollowed/${followedManga.id}` }">
       <ion-card>
         <img v-bind:src="'https://uploads.mangadex.org/covers/'+followedManga.id+'/'+coverName" />
         <ion-card-header>
-          <ion-card-subtitle>{{ followedManga.id }}</ion-card-subtitle>
+          <!-- <ion-card-subtitle>{{ followedManga.id }}</ion-card-subtitle> -->
           <ion-card-title>{{ followedManga.attributes.title.en }}</ion-card-title>
           <h3>Status : {{ mangaStatus }}</h3>
         </ion-card-header>
         <ion-card-content>{{ hideDesc }}</ion-card-content>
-        <ion-select :placeholder="mangaStatus">
-          <ion-select-option value="reading">Reading</ion-select-option>
-          <ion-select-option value="on_hold">On hold</ion-select-option>
-          <ion-select-option value="plan_to_read">Plan to read</ion-select-option>
-          <ion-select-option value="dropped">Dropped</ion-select-option>
-          <ion-select-option value="re_reading">Re reading</ion-select-option>
-          <ion-select-option value="completed">Completed</ion-select-option>
-      </ion-select>
-      <ion-button @click="updateStatus">Update status</ion-button>
       </ion-card>
       </router-link>
     </ion-slide>
@@ -32,7 +23,7 @@
 </template>
 
 <script>
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonSlide, IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonSlide } from '@ionic/vue';
 import axios from 'axios';
 export default {
   
@@ -55,37 +46,10 @@ export default {
   components: {
     IonCard,
     IonCardHeader,
-    IonCardSubtitle,
+    // IonCardSubtitle,
     IonCardTitle,
     IonCardContent,
-    IonSlide,
-    IonSelect,
-    IonSelectOption,
-    IonButton
-  },
-  methods: {
-    async updateStatus () {
-      const token = localStorage.getItem('token');
-      const newStatus = document.querySelector('input[name="ion-sel-1"]').value;
-      console.log(newStatus);
-      const data = {
-        "status": `${newStatus}`
-      };
-
-      await axios.post(`https://api.mangadex.org/manga/${this.mangaId}/status`, data, {
-        headers: {
-          'Authorization':`Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(resp => {
-          console.log(resp);
-      })
-      .catch(err => {
-          // Handle Error Here
-          console.error(err);
-      });
-    }
+    IonSlide
   },
   mounted() {
     axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
@@ -127,12 +91,11 @@ export default {
   }
   ion-slide ion-card {
     padding: 15px;
-    height: 600px;
+    height: 500px;
   }
   ion-slide ion-card img {
     width: 120px;
   }
-
   ion-card-content {
     padding: 0;
   }
@@ -145,5 +108,8 @@ export default {
     width: 300px;
     margin: 25px auto;
     padding: 5px;
+  }
+  a {
+    color: transparent;
   }
 </style>

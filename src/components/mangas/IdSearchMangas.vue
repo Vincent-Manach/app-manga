@@ -8,12 +8,12 @@
     <p><strong>Status</strong> : {{ manga.attributes.status }}</p>
   </div> -->
   <ion-slide>
-    <router-link :to="{ path: `/manga/${manga.id}` }">
+    <router-link :to="{ path: `/manga/${result.id}` }">
       <ion-slide>
         <ion-card>
-          <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" />
+          <img v-bind:src="'https://uploads.mangadex.org/covers/'+result.id+'/'+coverName" />
           <ion-card-header>
-            <ion-card-title>{{ manga.attributes.title.en }}</ion-card-title>
+            <ion-card-title>{{ result.attributes.title.en }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>{{ hideDesc }}</ion-card-content>
         </ion-card>
@@ -29,7 +29,7 @@ import axios from 'axios';
 export default {
   
   props: {
-    manga: {
+    result: {
       type: Object,
       required: true,
     },
@@ -39,14 +39,14 @@ export default {
     IonCardHeader,
     IonCardTitle, 
     IonCardContent, 
-    IonSlide
+    IonSlide,
   },
   data() {
     return {
-      coverId: this.manga.relationships[2].id,
+      coverId: this.result.relationships[2].id,
       coverName: '',
       hideDesc: '',
-      description: this.manga.attributes.description.en
+      description: this.result.attributes.description.en
     }
   },
   mounted() {
@@ -60,6 +60,7 @@ export default {
         // Handle Error Here
         console.error(err);
     });
+    console.log(this.result.attributes.description.en)
 
     if (this.description.length > 250) {
         this.hideDesc = this.description.substring(0, 250) + '...';

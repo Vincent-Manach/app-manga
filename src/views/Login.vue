@@ -8,7 +8,6 @@
           <!-- <img src="../../../public/assets/img/logotest.png" alt="logo"> -->
         </div>
         <div id="login">
-          <h1>Le nom de l'app</h1>
           <h2>Connectez-vous</h2>
           <div id="logPart">
             <form action="">
@@ -16,7 +15,7 @@
               <br/><br/>
               <input type="password" autocomplete="current-password" v-model="password" placeholder="password">
               <br/><br/>
-              <ion-button class="light" @click="checkAuth" id="logBtn">SE CONNECTER</ion-button><br/><br/>
+              <ion-button class="light" @click="userStore.addUser(username, password)" id="logBtn">SE CONNECTER</ion-button><br/><br/>
               <span id="errorLog">{{ errorLog }}</span>
             </form>
           </div>
@@ -29,8 +28,9 @@
 <script lang="ts">
 import { IonContent, IonPage, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import axios from 'axios';
-import jwtDecode from "jwt-decode";
+// import axios from 'axios';
+// import jwtDecode from "jwt-decode";
+import { useUserStore } from '@/stores/user.store';
 
 export default defineComponent({
   name: 'Login',
@@ -48,6 +48,10 @@ export default defineComponent({
     IonPage,
     // IonToolbar,
     IonButton
+  },
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
   },
   methods: {
     // async checkToken() {
@@ -84,36 +88,36 @@ export default defineComponent({
     //     console.log(err)
     //   }) 
     // },
-    async checkAuth() {
+    // async checkAuth() {
       
-      await axios.post('https://api.mangadex.org/auth/login', {
-          username: this.username,
-          password: this.password
-      })
-      .then( res => {
-        this.errorLog = '';
-        const tokenUser = res.data.token.session
-        const jwtToken = jwtDecode(tokenUser)
-        // const userId = jwtToken.test
+    //   await axios.post('https://api.mangadex.org/auth/login', {
+    //       username: this.username,
+    //       password: this.password
+    //   })
+    //   .then( res => {
+    //     this.errorLog = '';
+    //     const tokenUser = res.data.token.session
+    //     const jwtToken = jwtDecode(tokenUser)
+    //     // const userId = jwtToken.test
 
-        console.log(jwtToken)
+    //     console.log(jwtToken)
 
-        localStorage.setItem('token', tokenUser)
-        console.log(localStorage.getItem('token'))
-        localStorage.setItem('log', 'LogOn')
-        console.log(localStorage.getItem('log'))
-        // localStorage.setItem('userId', userId)
-        // console.log(localStorage.getItem('userId'))
-        this.$router.push({ path: '/home' })
-        // this.$router.push('/home');
-        // window.location.reload();
-        // this.refreshToken()
-      })
-      .catch(err => {
-        console.log(err)
-        this.errorLog = 'Your crendentials are invalid. Please try again'
-      }) 
-    },
+    //     localStorage.setItem('token', tokenUser)
+    //     console.log(localStorage.getItem('token'))
+    //     localStorage.setItem('log', 'LogOn')
+    //     console.log(localStorage.getItem('log'))
+    //     // localStorage.setItem('userId', userId)
+    //     // console.log(localStorage.getItem('userId'))
+    //     this.$router.push({ path: '/home' })
+    //     // this.$router.push('/home');
+    //     // window.location.reload();
+    //     // this.refreshToken()
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     this.errorLog = 'Your crendentials are invalid. Please try again'
+    //   }) 
+    // },
   }
 });
 
