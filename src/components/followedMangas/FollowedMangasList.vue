@@ -1,6 +1,6 @@
 <template>
-  <div class="showList">
-      <h1 class="title" >Followed Mangas </h1>
+  <div v-if="loading == false" class="showList">
+      <h1 class="title" >My followed mangas</h1>
       <ion-slides pager="true" :options="slideOpts">
         <id-followed-mangas v-for="followedManga in followedMangas" :key="followedManga.id" :followedManga="followedManga"></id-followed-mangas>
       </ion-slides> 
@@ -17,6 +17,7 @@ export default {
   data () {
     return {
       followedMangas: [],
+      loading: true,
     }
   },
   components: {
@@ -57,6 +58,7 @@ export default {
           this.followedMangas = res.data.data
           this.countData = res.data
           console.log(this.followedMangas)
+          this.loading = false
       })
       .catch(err => {
           console.error(err);
@@ -93,6 +95,6 @@ ion-slides {
     margin-top: 0px;
 }
 .title {
-  color: black;
+  color: white;
 }
 </style>

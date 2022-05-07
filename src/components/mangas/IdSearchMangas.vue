@@ -54,13 +54,11 @@ export default {
     .then(resp => {
         // console.log(resp.data.data);
         this.coverName = resp.data.data.attributes.fileName
-        console.log(this.coverName);
     })
     .catch(err => {
         // Handle Error Here
         console.error(err);
     });
-    console.log(this.result.attributes.description.en)
 
     if (this.description.length > 250) {
         this.hideDesc = this.description.substring(0, 250) + '...';

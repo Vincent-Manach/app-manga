@@ -130,11 +130,30 @@ export default {
             console.log(res)
             this.$forceUpdate()
             this.$router.push('/profile')
+
         })
         .catch(err => {
             console.log(err)
         })
-        }
+      },
+
+      async fetchFollows() {
+        const token = localStorage.getItem('token')
+        await axios.get('https://api.mangadex.org/user/follows/manga', {
+          headers: {
+            'Authorization':`Bearer ${token}`
+          }
+        })
+        .then(res => {
+            this.followedMangas = res.data.data
+            this.countData = res.data
+            console.log(this.followedMangas)
+            this.loading = false
+        })
+        .catch(err => {
+            console.error(err);
+        });
+      }
     },
     mounted () {
       this.fetchData();

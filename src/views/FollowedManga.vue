@@ -2,7 +2,6 @@
   <ion-page>    
     <ion-content :fullscreen="false">    
       <div id="container">
-        <strong>Ton manga</strong>
         <IdFollowedManga/>
 
       </div>

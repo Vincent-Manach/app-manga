@@ -10,12 +10,8 @@
             Se déconnecter
           </ion-button>
         </ion-item>
+        <p>Test {{ userStore.getUser }}</p>
         <br>
-        <!-- <ion-item>
-        <ion-label>
-          
-        </ion-label>
-        </ion-item> -->
         <FollowedMangasList />
         <br>
       </div>
@@ -29,6 +25,7 @@ import FollowedMangasList from '@/components/followedMangas/FollowedMangasList.v
 import { IonContent, IonPage, IonItem, IonButton, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import { useUserStore } from '@/stores/user.store';
 
 
 export default defineComponent({
@@ -51,6 +48,12 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonButton
+  },
+  setup() {
+    const userStore = useUserStore();
+    return {
+      userStore
+    };
   },
   methods: {
     async logout() {
@@ -106,28 +109,25 @@ ion-toolbar {
 }
 #container {
   text-align: center;
-  background: white;
   position: relative;
   top: 150px;
-  width: 95%;
-  margin: auto;
 }
 
-#container strong {
+#cntainer strong {
   font-size: 20px;
   line-height: 26px;
 }
-
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
   color: #8c8c8c;
-  
   margin: 0;
 }
-
 #container a {
   text-decoration: none;
+}
+ion-item {
+  width: 95%;
+  margin: auto;
 }
 </style>

@@ -1,7 +1,29 @@
 <template>
-  <div class="showList">
+  <div v-if="loading == false" class="showList">
+    <h2>Recent Uploads</h2>
     <ion-slides pager="true" :options="slideOpts">
-        <id-mangas v-for="manga in mangas" :key="manga.id" :manga="manga"></id-mangas>
+        <id-mangas v-for="manga in mangaStore.getRecents" :key="manga.id" :manga="manga"></id-mangas>
+    </ion-slides>
+  </div><br>
+
+  <div v-if="loading == false" class="showList">
+    <h2>Action</h2>
+    <ion-slides pager="true" :options="slideOpts">
+        <id-mangas v-for="manga in mangaStore.getActions" :key="manga.id" :manga="manga"></id-mangas>
+    </ion-slides>
+  </div><br>
+
+  <div v-if="loading == false" class="showList">
+    <h2>Adventure</h2>
+    <ion-slides pager="true" :options="slideOpts">
+        <id-mangas v-for="manga in mangaStore.getAdventures" :key="manga.id" :manga="manga"></id-mangas>
+    </ion-slides>
+  </div><br>
+
+  <div v-if="loading == false" class="showList">
+    <h2>Drama</h2>
+    <ion-slides pager="true" :options="slideOpts">
+        <id-mangas v-for="manga in mangasDrama" :key="manga.id" :manga="manga"></id-mangas>
     </ion-slides>
   </div>
 </template>
@@ -10,12 +32,14 @@
 import IdMangas from "@/components/mangas/IdMangas.vue";
 import { IonSlides } from '@ionic/vue';
 import axios from 'axios';
+import { useMangaStore } from '@/stores/manga.store';
 
 export default {
   name: 'MangasList',
   data () {
     return {
-      mangas: []
+      mangasDrama: [],
+      loading: true,
       // mangasChap: []
     }
   },
@@ -31,39 +55,66 @@ export default {
       initialSlide: 0,
       speed: 400
     };
-    return { slideOpts }
+    const mangaStore = useMangaStore()
+    return { slideOpts, mangaStore }
   },
   methods: {
-    // async fetchData () {
-    //   const token = localStorage.getItem('vuejs_token')
 
-    //   const res = axios.get('https://api.mangadex.org/manga', {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`
+    // async fetchAction () {
+    //   await axios.get('https://api.mangadex.org/manga?includedTags[]=391b0423-d847-456f-aff0-8b0cfc03066b&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
+    //     params: {
+    //       limit: 10
     //     }
     //   })
-    //   console.log(res)
-    //   this.mangas = res.data
-    //   console.log(this.mangas+'desf')
-    // }
+    //   .then(resp => {
+    //       // console.log(resp.data.data);
+    //       this.mangasAction = resp.data.data
+    //       console.log(this.mangasAction);
+    //       this.loading = false
+    //   })
+    //   .catch(err => {
+    //       // Handle Error Here
+    //       console.error(err);
+    //   });
+    // },
+
+    // async fetchAdventure () {
+    //   await axios.get('https://api.mangadex.org/manga?includedTags[]=87cc87cd-a395-47af-b27a-93258283bbc6&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
+    //     params: {
+    //       limit: 10
+    //     }
+    //   })
+    //   .then(resp => {
+    //       this.mangasAdventure = resp.data.data
+    //       console.log(this.mangasAdventure);
+    //       this.loading = false
+    //   })
+    //   .catch(err => {
+    //       console.error(err);
+    //   });
+    // },
+
+    async fetchDrama () {
+      await axios.get('https://api.mangadex.org/manga?includedTags[]=b9af3a63-f058-46de-a9a0-e0c13906197a&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
+        params: {
+          limit: 10
+        }
+      })
+      .then(resp => {
+          this.mangasDrama = resp.data.data
+          console.log(this.mangasDrama);
+          this.loading = false
+      })
+      .catch(err => {
+          console.error(err);
+      });
+    },
+
   },
   mounted () {
-    // this.fetchData()
-
-    axios.get('https://api.mangadex.org/manga/', {
-      params: {
-        limit: 5
-      }
-    })
-    .then(resp => {
-        // console.log(resp.data.data);
-        this.mangas = resp.data.data
-        console.log(this.mangas);
-    })
-    .catch(err => {
-        // Handle Error Here
-        console.error(err);
-    });
+    // this.fetchRecent()
+    this.mangaStore.initFetchHome()
+    this.fetchDrama()
 
 
     // axios.get('https://api.mangadex.org/manga/{id}/aggregate', {

@@ -54,6 +54,7 @@ export default defineComponent({
   },
   methods: {
     async searchData (data) {
+      this.ok = false
         await axios.get(`https://api.mangadex.org/manga/?title=${data}`, {
          
         })
@@ -62,14 +63,12 @@ export default defineComponent({
             this.results = resp.data.data
             console.log(this.results);
             this.ok = true
+            this.search = null
         })
         .catch(err => {
             console.error(err);
         });
       }
-  },
-  mounted() {
-    // this.searchData()
   }
 });
 </script>
@@ -91,7 +90,7 @@ ion-toolbar {
   margin: 0 25px;
 }
 ion-input {
-  background-color: red;
+  border: 1px solid white;
   flex: 5;  
   border-radius: 3px;
 }

@@ -54,7 +54,6 @@ export default {
     .then(resp => {
         // console.log(resp.data.data);
         this.coverName = resp.data.data.attributes.fileName
-        console.log(this.coverName);
     })
     .catch(err => {
         // Handle Error Here
