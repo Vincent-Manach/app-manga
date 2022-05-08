@@ -8,15 +8,16 @@
           <!-- <img src="../../../public/assets/img/logotest.png" alt="logo"> -->
         </div>
         <div id="login">
-          <h2>Connectez-vous</h2>
+          <h2>Log In</h2>
+          <br/>
           <div id="logPart">
             <form action="">
-              <input type="text" autocomplete="username" v-model="username" placeholder="username">
-              <br/><br/>
-              <input type="password" autocomplete="current-password" v-model="password" placeholder="password">
-              <br/><br/>
-              <ion-button class="light" @click="userStore.addUser(username, password)" id="logBtn">SE CONNECTER</ion-button><br/><br/>
-              <span id="errorLog">{{ errorLog }}</span>
+              <ion-input type="text" autocomplete="username" v-model="username" placeholder="Username"></ion-input>
+              <br/>
+              <ion-input type="password" autocomplete="current-password" v-model="password" placeholder="Password"></ion-input>
+              <br/>
+              <ion-button class="light" @click="userStore.logIn(username, password)" id="logBtn">LOG IN</ion-button><br/><br/>
+              <span id="errorLog">{{ userStore.getLogMessage }}</span>
             </form>
           </div>
         </div>
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonButton } from '@ionic/vue';
+import { IonContent, IonPage, IonInput, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
 // import axios from 'axios';
 // import jwtDecode from "jwt-decode";
@@ -46,6 +47,7 @@ export default defineComponent({
     IonContent,
     // IonHeader,
     IonPage,
+    IonInput,
     // IonToolbar,
     IonButton
   },
@@ -124,37 +126,34 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-ion-toolbar {
-  display: flex;
-  text-align: center;
-}
-
 #container {
   text-align: center;
-  
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
 }
-
 #container strong {
   font-size: 20px;
   line-height: 26px;
 }
-
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
   color: #8c8c8c;
-  
   margin: 0;
 }
-
 #container a {
   text-decoration: none;
+}
+#logPart {
+  width: 40vw;
+  margin: auto;
+}
+ion-input {
+  border: 1px solid white;
+  border-radius: 3px;
+  text-align: left;
 }
 </style>

@@ -3,11 +3,10 @@
       <img v-bind:src="'https://uploads.mangadex.org/covers/'+mangaId+'/'+coverName" />
       <ion-card-header>
         <ion-card-title>{{ mangaTitle }}</ion-card-title>
-        <div class="detailsVol">
-          <p>Last Chapter : {{ mangaLastChap }}</p>
-          <p>Last Volume : {{ mangaLastVol }}</p>
+        <div v-if="mangaLastChap || mangaLastVol" class="detailsVol">
+          <p  v-if="mangaLastChap">Last Chapter : {{ mangaLastChap }}</p>
+          <p  v-if="mangaLastVol">Last Volume : {{ mangaLastVol }}</p>
         </div>
-        
       </ion-card-header>
       <ion-card-content>{{ mangaDesc }}</ion-card-content>
       <ion-select :placeholder="mangaStatus" interface-options="options">
@@ -20,12 +19,20 @@
       </ion-select>
       <ion-button @click="updateStatus">Update status</ion-button><br>
       <ion-button @click="removeFollow">Remove</ion-button>
+      <br>
+      <hr>
+      <div v-if="loading == false" class="showList">
+        <h2>Chapters</h2>
+        <id-manga-chaps v-for="mangaChap in mangaChaps" :key="mangaChap.id" :mangaChap="mangaChap"></id-manga-chaps>
+      </div>
     </ion-card>
 </template>
 
 <script>
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
+import IdMangaChaps from "@/components/manga/IdMangaChaps.vue";
 import axios from 'axios';
+import { useMangaStore } from '@/stores/manga.store';
 
 export default {
   
@@ -33,6 +40,7 @@ export default {
   data () {
     return {
       manga: [],
+      mangaChaps: [],
       mangaId: '', 
       mangaStatus: '',
       mangaTitle: '',
@@ -41,6 +49,7 @@ export default {
       mangaLastChap: '',
       coverId: '',
       coverName: '',
+      loading: false,
     }
   },
   components: {
@@ -50,7 +59,12 @@ export default {
     IonCardContent,
     IonSelect,
     IonSelectOption,
-    IonButton
+    IonButton,
+    'id-manga-chaps': IdMangaChaps,
+  },
+  setup() {
+    const mangaStore = useMangaStore()
+    return { mangaStore }
   },
   methods: {
       async fetchData () {
@@ -65,6 +79,7 @@ export default {
             this.coverId = resp.data.data.relationships[2].id
             console.log(this.manga);
             this.fetchImg()
+            this.fetchChap()
         })
         .catch(err => {
             console.error(err);
@@ -128,32 +143,25 @@ export default {
         })
         .then( res => {
             console.log(res)
-            this.$forceUpdate()
+            this.mangaStore.fetchFollows()
             this.$router.push('/profile')
-
         })
         .catch(err => {
             console.log(err)
         })
       },
 
-      async fetchFollows() {
-        const token = localStorage.getItem('token')
-        await axios.get('https://api.mangadex.org/user/follows/manga', {
-          headers: {
-            'Authorization':`Bearer ${token}`
-          }
-        })
-        .then(res => {
-            this.followedMangas = res.data.data
-            this.countData = res.data
-            console.log(this.followedMangas)
+      async fetchChap () {
+        await axios.get(`https://api.mangadex.org/manga/${this.mangaId}/feed?translatedLanguage[]=en&order[volume]=asc&order[chapter]=asc`)
+        .then(resp => {
+            this.mangaChaps = resp.data.data
+            console.log(this.mangaChaps)
             this.loading = false
         })
         .catch(err => {
             console.error(err);
         });
-      }
+      },
     },
     mounted () {
       this.fetchData();
@@ -206,5 +214,12 @@ export default {
   ion-select {
     width: 150px;
     margin: auto;
+    font-size: 24px;
+  }
+  .showList h2 {
+    color: white;
+  }
+  hr {
+    border-top: 1px solid white;
   }
 </style>

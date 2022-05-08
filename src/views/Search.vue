@@ -1,9 +1,6 @@
 <template>
   <ion-page>    
-    <ion-content :fullscreen="false"> 
-      <!-- <form action="" method="GET">
-        <ion-searchbar mode="ios" color="danger" show-cancel-button="never" inputmode="search" id="searchBar" @keydown.enter="searchData()"></ion-searchbar>
-      </form> -->
+    <ion-content :fullscreen="false">
       <div id="searchBlock"> 
         <ion-input  id="searchInput" type="text" placeholder="Search..." v-model="search"></ion-input>
         <ion-button @click="searchData(search)">Search</ion-button>
@@ -32,7 +29,6 @@ export default defineComponent({
       results: [],
       search: null,
       ok: false
-      // mangasChap: []
     }
   },
   components: {
@@ -44,7 +40,6 @@ export default defineComponent({
     IonSlides,
   },
   setup() {
-    // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
     const slideOpts = {
       slidesPerView: 1,
       initialSlide: 0,
@@ -59,7 +54,6 @@ export default defineComponent({
          
         })
         .then(resp => {
-            // console.log(resp.data.data);
             this.results = resp.data.data
             console.log(this.results);
             this.ok = true
@@ -86,7 +80,7 @@ ion-toolbar {
 #searchBlock {
   display: flex;
   position: relative;
-  top: 80px;
+  top: 120px;
   margin: 0 25px;
 }
 ion-input {
@@ -102,10 +96,11 @@ ion-buttton {
 }
 .showList {
   position: relative;
-  top: 80px;
+  top: 120px;
 }
 ion-slides {
   padding: 20px 0;
+  height: auto;
 }
 #container {
   text-align: center;
@@ -116,21 +111,16 @@ ion-slides {
   top: 50%;
   transform: translateY(-50%);
 }
-
 #container strong {
   font-size: 20px;
   line-height: 26px;
 }
-
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
   color: #8c8c8c;
-  
   margin: 0;
 }
-
 #container a {
   text-decoration: none;
 }

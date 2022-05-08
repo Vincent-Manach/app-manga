@@ -1,17 +1,17 @@
 <template>
     <ion-card>
-      <!-- <img v-bind:src="'https://uploads.mangadex.org/covers/'+mangaId+'/'+coverName" /> -->
       <ion-card-header>
         <ion-card-title>{{ mangaTitle }}</ion-card-title>
         <img v-bind:src="'https://uploads.mangadex.org/covers/'+mangaId+'/'+coverName" />
-        <div class="detailsVol">
-          <p>Last Chapter : {{ mangaLastChap }}</p>
-          <p>Last Volume : {{ mangaLastVol }}</p>
+        <div v-if="mangaLastChap || mangaLastVol" class="detailsVol">
+          <p  v-if="mangaLastChap">Last Chapter : {{ mangaLastChap }}</p>
+          <p  v-if="mangaLastVol">Last Volume : {{ mangaLastVol }}</p>
         </div>
       </ion-card-header>
       <ion-card-content>{{ mangaDesc }}</ion-card-content>
       <ion-button v-if="logged == true" @click="addFollow">Add</ion-button> 
-      <!-- v-if="logged == true" -->
+      <br>
+      <hr>
       <div v-if="loading == false" class="showList">
         <h2>Chapters</h2>
         <id-manga-chaps v-for="mangaChap in mangaChaps" :key="mangaChap.id" :mangaChap="mangaChap"></id-manga-chaps>
@@ -23,6 +23,7 @@
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/vue';
 import IdMangaChaps from "@/components/manga/IdMangaChaps.vue";
 import axios from 'axios';
+import { useMangaStore } from '@/stores/manga.store';
 
 export default {
   
@@ -49,6 +50,10 @@ export default {
     IonCardContent,
     IonButton,
     'id-manga-chaps': IdMangaChaps,
+  },
+  setup() {
+    const mangaStore = useMangaStore()
+    return { mangaStore }
   },
   methods: {
     async fetchData () {
@@ -87,13 +92,11 @@ export default {
     async fetchChap () {
       await axios.get(`https://api.mangadex.org/manga/${this.mangaId}/feed?translatedLanguage[]=en&order[volume]=asc&order[chapter]=asc`)
       .then(resp => {
-          // console.log(resp.data.data);
           this.mangaChaps = resp.data.data
           console.log(this.mangaChaps)
           this.loading = false
       })
       .catch(err => {
-          // Handle Error Here
           console.error(err);
       });
     },
@@ -108,6 +111,8 @@ export default {
       })
       .then(res => {
           console.log(res)
+          this.mangaStore.fetchFollows()
+          this.$router.push('/profile')
       })
       .catch(err => {
           console.log(err)
@@ -160,9 +165,16 @@ export default {
   }
   ion-card-content {
     color: white;
+    padding-top: 15px;
   }
   ion-select {
     width: 150px;
     margin: auto;
+  }
+  .showList h2 {
+    color: white;
+  }
+  hr {
+    border-top: 1px solid white;
   }
 </style>

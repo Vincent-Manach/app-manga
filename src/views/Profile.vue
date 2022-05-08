@@ -10,7 +10,6 @@
             Se déconnecter
           </ion-button>
         </ion-item>
-        <p>Test {{ userStore.getUser }}</p>
         <br>
         <FollowedMangasList />
         <br>
@@ -72,6 +71,7 @@ export default defineComponent({
                   storage: localStorage.removeItem('token')
               }
           }))
+          this.userStore.resetMessage()
           this.$router.push('/login');
         }
       })
@@ -110,7 +110,7 @@ ion-toolbar {
 #container {
   text-align: center;
   position: relative;
-  top: 150px;
+  margin-top: 150px;
 }
 
 #cntainer strong {

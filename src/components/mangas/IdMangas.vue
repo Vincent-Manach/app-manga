@@ -1,23 +1,13 @@
 <template>
-  <!-- <div class="id-card">
-    <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" alt="">
-    <h2> {{ manga.attributes.title.en }} </h2>
-    <h3>Description :</h3>
-    <p> {{ manga.attributes.description.en }} </p>
-    <br>
-    <p><strong>Status</strong> : {{ manga.attributes.status }}</p>
-  </div> -->
   <ion-slide>
     <router-link :to="{ path: `/manga/${manga.id}` }">
-      <ion-slide>
-        <ion-card>
-          <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" />
-          <ion-card-header>
-            <ion-card-title>{{ manga.attributes.title.en }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>{{ hideDesc }}</ion-card-content>
-        </ion-card>
-      </ion-slide>
+      <ion-card>
+        <img v-bind:src="'https://uploads.mangadex.org/covers/'+manga.id+'/'+coverName" />
+        <ion-card-header>
+          <ion-card-title>{{ manga.attributes.title.en }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>{{ hideDesc }}</ion-card-content>
+      </ion-card>
     </router-link>
   </ion-slide>
 </template>
@@ -52,11 +42,9 @@ export default {
   mounted() {
     axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
     .then(resp => {
-        // console.log(resp.data.data);
         this.coverName = resp.data.data.attributes.fileName
     })
     .catch(err => {
-        // Handle Error Here
         console.error(err);
     });
 
@@ -81,7 +69,7 @@ export default {
     padding: 5px;
   }
   ion-slide {
-    width: 350px !important;
+    width: 100vw;
   }
   ion-slide ion-card {
     padding: 15px;

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="loading == false" class="showList">
+  <div v-if="mangaStore.getLoadingFollows == false" class="showList">
       <h1 class="title" >My followed mangas</h1>
       <ion-slides pager="true" :options="slideOpts">
-        <id-followed-mangas v-for="followedManga in followedMangas" :key="followedManga.id" :followedManga="followedManga"></id-followed-mangas>
+        <id-followed-mangas v-for="followedManga in mangaStore.getFollows" :key="followedManga.id" :followedManga="followedManga"></id-followed-mangas>
       </ion-slides> 
   </div>
 </template>
@@ -10,13 +10,13 @@
 <script>
 import IdFollowedMangas from "@/components/followedMangas/IdFollowedMangas.vue";
 import { IonSlides } from '@ionic/vue';
-import axios from 'axios';
+// import axios from 'axios';
+import { useMangaStore } from '@/stores/manga.store';
 
 export default {
   name: 'FollowedMangasList',
   data () {
     return {
-      followedMangas: [],
       loading: true,
     }
   },
@@ -25,13 +25,13 @@ export default {
     IonSlides
   },
   setup() {
-    // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
     const slideOpts = {
-      slidesPerView: 3,
+      slidesPerView: 1,
       initialSlide: 0,
       speed: 400
     };
-    return { slideOpts }
+    const mangaStore = useMangaStore()
+    return { slideOpts, mangaStore }
   },
   methods: {
     // async fetchData () {
@@ -47,26 +47,26 @@ export default {
     //   console.log(this.mangas+'desf')
     // }
 
-    async fetchData() {
-      const token = localStorage.getItem('token')
-      await axios.get('https://api.mangadex.org/user/follows/manga', {
-        headers: {
-          'Authorization':`Bearer ${token}`
-        }
-      })
-      .then(res => {
-          this.followedMangas = res.data.data
-          this.countData = res.data
-          console.log(this.followedMangas)
-          this.loading = false
-      })
-      .catch(err => {
-          console.error(err);
-      });
-    }
+    // async fetchData() {
+    //   const token = localStorage.getItem('token')
+    //   await axios.get('https://api.mangadex.org/user/follows/manga', {
+    //     headers: {
+    //       'Authorization':`Bearer ${token}`
+    //     }
+    //   })
+    //   .then(res => {
+    //       this.followedMangas = res.data.data
+    //       console.log(this.followedMangas)
+    //       this.loading = false
+    //   })
+    //   .catch(err => {
+    //       console.error(err);
+    //   });
+    // }
   },
   mounted () {
-    this.fetchData()
+    // this.fetchData()
+    this.mangaStore.fetchFollows()
     
 
     // axios.get('https://api.mangadex.org/manga/{id}/aggregate', {
@@ -90,6 +90,7 @@ export default {
 <style scoped>
 ion-slides {
   padding: 20px 20px 30px 20px;
+  height: auto;
 }
 .showList {
     margin-top: 0px;

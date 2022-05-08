@@ -9,15 +9,13 @@
   </div> -->
   <ion-slide>
     <router-link :to="{ path: `/manga/${result.id}` }">
-      <ion-slide>
-        <ion-card>
-          <img v-bind:src="'https://uploads.mangadex.org/covers/'+result.id+'/'+coverName" />
-          <ion-card-header>
-            <ion-card-title>{{ result.attributes.title.en }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>{{ hideDesc }}</ion-card-content>
-        </ion-card>
-      </ion-slide>
+      <ion-card>
+        <img v-bind:src="'https://uploads.mangadex.org/covers/'+result.id+'/'+coverName" />
+        <ion-card-header>
+          <ion-card-title>{{ result.attributes.title.en }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>{{ hideDesc }}</ion-card-content>
+      </ion-card>
     </router-link>
   </ion-slide>
 </template>
@@ -81,7 +79,7 @@ export default {
     padding: 5px;
   }
   ion-slide {
-    width: 350px !important;
+    width: 100vw;
   }
   ion-slide ion-card {
     padding: 15px;

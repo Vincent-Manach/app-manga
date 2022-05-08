@@ -6,23 +6,23 @@ export const useUserStore = defineStore({
     id: 'user',
     state: () => ({
         loggedUser: [],
+        errorLog: '',
     }),
     getters: {
         getUser: (state) => { return state.loggedUser },
+        getLogMessage: (state) => { return state.errorLog },
     },
     actions: {
-        async addUser(username, password) {
+        async logIn(username, password) {
             await axios.post('https://api.mangadex.org/auth/login', {
                 username: username,
                 password: password
             })
             .then( res => {
-                this.errorLog = '';
+                this.errorLog = 'You are logged !';
                 const tokenUser = res.data.token.session
                 const jwtToken = jwtDecode(tokenUser)
-                // const userId = jwtToken.test
                 this.loggedUser = jwtToken;
-
                 console.log(jwtToken)
 
                 localStorage.setItem('token', tokenUser)
@@ -45,14 +45,9 @@ export const useUserStore = defineStore({
                 console.log(err)
                 this.errorLog = 'Your crendentials are invalid. Please try again'
             })
-            // if (!this.hasShow(show.id)) {
-            //     this.showsList = [...this.showsList, show];
-            // }
         },
-        removeUser(show) {
-            this.showsList = this.showsList.filter(function(el) {
-                return el.id !== show.id
-            });
+        resetMessage() {
+            this.errorLog = ''
         }
     }
 })
