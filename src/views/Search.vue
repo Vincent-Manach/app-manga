@@ -46,7 +46,7 @@ export default defineComponent({
   setup() {
     // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
     const slideOpts = {
-      slidesPerView: 3,
+      slidesPerView: 1,
       initialSlide: 0,
       speed: 400
     };
