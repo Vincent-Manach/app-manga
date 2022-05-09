@@ -19,7 +19,6 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    // IonButton,
     MangasList,
   }
 });

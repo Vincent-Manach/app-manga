@@ -37,7 +37,6 @@ export default {
       mangaDesc: '',
       mangaLastVol: '',
       mangaLastChap: '',
-      coverId: '',
       coverName: '',
       logged: false,
       loading: true,
@@ -56,44 +55,51 @@ export default {
     return { mangaStore }
   },
   methods: {
+    // fetch manga data
     async fetchData () {
       await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}`)
       .then(resp => {
-          // console.log(resp.data.data);
+          console.log(resp.data.data);
           this.manga = resp.data
           this.mangaId = resp.data.data.id
           this.mangaTitle = resp.data.data.attributes.title.en
           this.mangaDesc = resp.data.data.attributes.description.en
           this.mangaLastChap = resp.data.data.attributes.lastChapter
           this.mangaLastVol = resp.data.data.attributes.lastVolume
-          this.coverId = resp.data.data.relationships[2].id
+          if (resp.data.data.relationships[2].type == "cover_art") {
+            const coverId = resp.data.data.relationships[2].id
+            this.fetchImg(coverId)
+          } else if (resp.data.data.relationships[3].type == "cover_art") {
+            const coverId = resp.data.data.relationships[3].id
+            this.fetchImg(coverId)
+          } else if (resp.data.data.relationships[4].type == "cover_art") {
+            const coverId = resp.data.data.relationships[4].id
+            this.fetchImg(coverId)
+          }
           console.log(this.manga);
-          this.fetchImg()
           this.fetchChap()
       })
       .catch(err => {
-          // Handle Error Here
           console.error(err);
       });
     },
 
-    async fetchImg () {
-      await axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
+  // fetch manga img
+    async fetchImg (coverId) {
+      await axios.get(`https://api.mangadex.org/cover/${coverId}`)
       .then(resp => {
-          // console.log(resp.data.data);
           this.coverName = resp.data.data.attributes.fileName
       })
       .catch(err => {
-          // Handle Error Here
           console.error(err);
       });
     },
 
+  // fetch manga chapters
     async fetchChap () {
       await axios.get(`https://api.mangadex.org/manga/${this.mangaId}/feed?translatedLanguage[]=en&order[volume]=asc&order[chapter]=asc`)
       .then(resp => {
           this.mangaChaps = resp.data.data
-          console.log(this.mangaChaps)
           this.loading = false
       })
       .catch(err => {
@@ -101,6 +107,7 @@ export default {
       });
     },
 
+    // add this manga to followed mangas
     async addFollow() {
       const token = localStorage.getItem('token');
       await axios.post(`https://api.mangadex.org/manga/${this.mangaId}/follow`, {}, {
@@ -122,6 +129,7 @@ export default {
     mounted () {
       this.fetchData();
       
+      // check if logged
       if (localStorage.getItem('token')) {
         this.logged = true
       } else {
@@ -154,7 +162,7 @@ export default {
   }
   .detailsVol {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
   }
   .detailsVol p {
     padding: 5px 10px;

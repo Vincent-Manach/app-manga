@@ -13,6 +13,7 @@ export const useUserStore = defineStore({
         getLogMessage: (state) => { return state.errorLog },
     },
     actions: {
+        // log in function
         async logIn(username, password) {
             await axios.post('https://api.mangadex.org/auth/login', {
                 username: username,
@@ -32,14 +33,6 @@ export const useUserStore = defineStore({
                         storage: localStorage.getItem('token')
                     }
                 }))
-                // localStorage.setItem('log', 'LogOn')
-                // console.log(localStorage.getItem('log'))
-                // localStorage.setItem('userId', userId)
-                // console.log(localStorage.getItem('userId'))
-                // this.$router.push({ path: '/home' })
-                // this.$router.push('/home');
-                // window.location.reload();
-                // this.refreshToken()
             })
             .catch(err => {
                 console.log(err)

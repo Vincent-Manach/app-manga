@@ -20,10 +20,7 @@ export default defineComponent({
   name: 'FollowedManga',
   components: {
     IonContent,
-    // IonHeader,
     IonPage,
-    // IonToolbar,
-    // IonButton,
     IdFollowedManga,
   }
 });
@@ -53,9 +50,7 @@ ion-toolbar {
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
   color: #8c8c8c;
-  
   margin: 0;
 }
 

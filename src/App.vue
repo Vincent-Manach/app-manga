@@ -21,7 +21,6 @@ export default defineComponent({
   },
   setup() {
     const userStore = useUserStore();
-    // userStore.getUser;
     return { userStore };
   },
 });

@@ -33,13 +33,21 @@ export default {
   },
   data() {
     return {
-      coverId: this.manga.relationships[2].id,
+      coverId: '',
       coverName: '',
       hideDesc: '',
       description: this.manga.attributes.description.en
     }
   },
   mounted() {
+    // fetch manga cover id (depends of its place in data)
+    if (this.manga.relationships[2].type == "cover_art") {
+      this.coverId = this.manga.relationships[2].id
+    } else if (this.manga.relationships[3].type == "cover_art") {
+      this.coverId = this.manga.relationships[3].id
+    }
+
+    // fetch manga cover
     axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
     .then(resp => {
         this.coverName = resp.data.data.attributes.fileName
@@ -48,6 +56,7 @@ export default {
         console.error(err);
     });
 
+    // hide description if it is more than 250 characters
     if (this.description.length > 250) {
         this.hideDesc = this.description.substring(0, 250) + '...';
     } else {

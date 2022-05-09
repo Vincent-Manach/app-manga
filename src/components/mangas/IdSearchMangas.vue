@@ -41,23 +41,32 @@ export default {
   },
   data() {
     return {
-      coverId: this.result.relationships[2].id,
+      coverId: '',
       coverName: '',
       hideDesc: '',
       description: this.result.attributes.description.en
     }
   },
   mounted() {
+    // fetch manga cover id (depends of its place in data)
+    if (this.result.relationships[2].type == "cover_art") {
+      this.coverId = this.result.relationships[2].id
+    } else if (this.result.relationships[3].type == "cover_art") {
+      this.coverId = this.result.relationships[3].id
+    } else if (this.result.relationships[4].type == "cover_art") {
+      this.coverId = this.result.relationships[4].id
+    }
+
+    // fetch manga cover
     axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
     .then(resp => {
-        // console.log(resp.data.data);
         this.coverName = resp.data.data.attributes.fileName
     })
     .catch(err => {
-        // Handle Error Here
         console.error(err);
     });
 
+  // hide description if it is more than 250 characters
     if (this.description.length > 250) {
         this.hideDesc = this.description.substring(0, 250) + '...';
     } else {

@@ -9,7 +9,7 @@
         </div>
       </ion-card-header>
       <ion-card-content>{{ mangaDesc }}</ion-card-content>
-      <ion-select :placeholder="mangaStatus" interface-options="options">
+      <ion-select :placeholder="mangaStore.getMangaStatus" interface-options="options">
         <ion-select-option value="reading">Reading</ion-select-option>
         <ion-select-option value="on_hold">On hold</ion-select-option>
         <ion-select-option value="plan_to_read">Plan to read</ion-select-option>
@@ -67,6 +67,7 @@ export default {
     return { mangaStore }
   },
   methods: {
+      // fetch manga data
       async fetchData () {
         await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}`)
         .then(resp => {
@@ -80,12 +81,14 @@ export default {
             console.log(this.manga);
             this.fetchImg()
             this.fetchChap()
+            this.mangaStore.fetchStatus(this.mangaId);
         })
         .catch(err => {
             console.error(err);
         });
       },
 
+      // fetch manga img
       async fetchImg () {
         await axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
         .then(resp => {
@@ -96,9 +99,9 @@ export default {
         });
       },
 
+      // fetch manga status
       async fetchStatus () {
         const token = localStorage.getItem('token')
-        console.log(this.$route.params.id)
         await axios.get(`https://api.mangadex.org/manga/${this.$route.params.id}/status`, {
           headers: {
             'Authorization':`Bearer ${token}`
@@ -112,6 +115,7 @@ export default {
         });
       },
 
+      // update manga status
       async updateStatus () {
         const token = localStorage.getItem('token');
         const newStatus = document.querySelector('input[type="hidden"]').value;
@@ -128,12 +132,14 @@ export default {
         })
         .then(resp => {
             console.log(resp);
+            this.fetchStatus()
         })
         .catch(err => {
             console.error(err);
         });
       },
 
+      // remove manga from followed manga
       async removeFollow () {
         const token = localStorage.getItem('token')
         await axios.delete(`https://api.mangadex.org/manga/${this.mangaId}/follow`, {
@@ -151,6 +157,7 @@ export default {
         })
       },
 
+      // fetch manga chapters
       async fetchChap () {
         await axios.get(`https://api.mangadex.org/manga/${this.mangaId}/feed?translatedLanguage[]=en&order[volume]=asc&order[chapter]=asc`)
         .then(resp => {
@@ -165,17 +172,6 @@ export default {
     },
     mounted () {
       this.fetchData();
-      this.fetchStatus();
-
-      // axios.get(`https://api.mangadex.org/cover/${this.manga.relationships[2].id}`)
-      // .then(resp => {
-      //     // console.log(resp.data.data);
-      //     this.coverName = resp.data.data.attributes.fileName
-      // })
-      // .catch(err => {
-      //     // Handle Error Here
-      //     console.error(err);
-      // });
     }
   }
 </script>
@@ -199,7 +195,7 @@ export default {
   }
   .detailsVol {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
   }
   .detailsVol p {
     padding: 5px 10px;

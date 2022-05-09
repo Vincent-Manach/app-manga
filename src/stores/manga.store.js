@@ -10,6 +10,7 @@ export const useMangaStore = defineStore({
         dramas: [],
         results: [],
         followedMangas: [],
+        mangaStatus: '',
         loadingRecents: true,
         loadingActions: true,
         loadingAdventures: true,
@@ -18,12 +19,16 @@ export const useMangaStore = defineStore({
         loadingFollows: true,
     }),
     getters: {
+        // get datas
         getRecents: (state) => { return state.recents },
         getActions: (state) => { return state.actions },
         getAdventures: (state) => { return state.adventures },
         getDramas: (state) => { return state.dramas },
         getResults: (state) => { return state.results },
         getFollows: (state) => { return state.followedMangas },
+        getMangaStatus: (state) => { return state.mangaStatus },
+
+        // loaders
         getLoadingRecents: (state) => { return state.loadingRecents },
         getLoadingActions: (state) => { return state.loadingActions },
         getLoadingAdventures: (state) => { return state.loadingAdventures },
@@ -32,6 +37,7 @@ export const useMangaStore = defineStore({
         getLoadingFollows: (state) => { return state.loadingFollows },
     },
     actions: {
+        // init fetch datas on home
         initFetchHome() {
             this.fetchRecent();
             this.fetchAction();
@@ -95,6 +101,7 @@ export const useMangaStore = defineStore({
                 console.error(err);
             });
         },
+        // search data
         async searchData (data) {
             this.loadingResults = true
             await axios.get(`https://api.mangadex.org/manga/?title=${data}`, {
@@ -108,6 +115,7 @@ export const useMangaStore = defineStore({
                 console.error(err);
             });
         },
+        // fetch user's followed mangas
         async fetchFollows() {
             const token = localStorage.getItem('token')
             await axios.get('https://api.mangadex.org/user/follows/manga', {
@@ -123,6 +131,21 @@ export const useMangaStore = defineStore({
             .catch(err => {
                 console.error(err);
             });
-        }
+        },
+        // fetch manga status
+        async fetchStatus (mangaId) {
+            const token = localStorage.getItem('token')
+            await axios.get(`https://api.mangadex.org/manga/${mangaId}/status`, {
+              headers: {
+                'Authorization':`Bearer ${token}`
+              }
+            })
+            .then(resp => {
+                this.mangaStatus = resp.data.status
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        },
     }
 })

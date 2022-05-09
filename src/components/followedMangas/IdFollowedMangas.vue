@@ -5,7 +5,7 @@
         <img v-bind:src="'https://uploads.mangadex.org/covers/'+followedManga.id+'/'+coverName" />
         <ion-card-header>
           <ion-card-title>{{ followedManga.attributes.title.en }}</ion-card-title>
-          <h3>Status : {{ mangaStatus }}</h3>
+          <!-- <h3>Status : {{ mangaStatus }}</h3> -->
         </ion-card-header>
         <ion-card-content>{{ hideDesc }}</ion-card-content>
       </ion-card>
@@ -16,6 +16,7 @@
 <script>
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonSlide } from '@ionic/vue';
 import axios from 'axios';
+
 export default {
   
   props: {
@@ -31,7 +32,7 @@ export default {
       hideDesc: '',
       description: this.followedManga.attributes.description.en,
       mangaId: this.followedManga.id,
-      mangaStatus: ''
+      // mangaStatus: ''
     }
   },
   components: {
@@ -42,6 +43,7 @@ export default {
     IonSlide
   },
   mounted() {
+    // fetch manga cover
     axios.get(`https://api.mangadex.org/cover/${this.coverId}`)
     .then(resp => {
         this.coverName = resp.data.data.attributes.fileName
@@ -50,24 +52,25 @@ export default {
         console.error(err);
     });
 
+    // hide description if it is more than 250 characters
     if (this.description.length > 250) {
         this.hideDesc = this.description.substring(0, 250) + '...';
     } else {
         this.hideDesc = this.description;
     }
 
-    const token = localStorage.getItem('token')
-    axios.get(`https://api.mangadex.org/manga/${this.mangaId}/status`, {
-        headers: {
-        'Authorization':`Bearer ${token}`
-      }
-    })
-    .then(resp => {
-        this.mangaStatus = resp.data.status
-    })
-    .catch(err => {
-        console.error(err);
-    });
+    // const token = localStorage.getItem('token')
+    // axios.get(`https://api.mangadex.org/manga/${this.mangaId}/status`, {
+    //     headers: {
+    //     'Authorization':`Bearer ${token}`
+    //   }
+    // })
+    // .then(resp => {
+    //     this.mangaStatus = resp.data.status
+    // })
+    // .catch(err => {
+    //     console.error(err);
+    // });
   }
 }
 </script>

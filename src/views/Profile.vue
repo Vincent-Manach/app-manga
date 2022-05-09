@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import FollowedMangasList from '@/components/followedMangas/FollowedMangasList.vue';
-// import ListsList from '@/components/lists/ListsList.vue';
 import { IonContent, IonPage, IonItem, IonButton, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
@@ -39,11 +38,8 @@ export default defineComponent({
   },
   components: {
     FollowedMangasList,
-    // ListsList,
     IonContent,
-    // IonHeader,
     IonPage,
-    // IonToolbar,
     IonItem,
     IonLabel,
     IonButton

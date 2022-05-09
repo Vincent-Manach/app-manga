@@ -31,17 +31,10 @@
 <script>
 import IdMangas from "@/components/mangas/IdMangas.vue";
 import { IonSlides } from '@ionic/vue';
-// import axios from 'axios';
 import { useMangaStore } from '@/stores/manga.store';
 
 export default {
   name: 'MangasList',
-  data () {
-    return {
-      // mangasDrama: [],
-      // loading: true,
-    }
-  },
   components: {
     'id-mangas': IdMangas,
     IonSlides,
@@ -55,27 +48,8 @@ export default {
     const mangaStore = useMangaStore()
     return { slideOpts, mangaStore }
   },
-  methods: {
-    // async fetchDrama () {
-    //   await axios.get('https://api.mangadex.org/manga?includedTags[]=b9af3a63-f058-46de-a9a0-e0c13906197a&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
-    //     params: {
-    //       limit: 10
-    //     }
-    //   })
-    //   .then(resp => {
-    //       this.mangasDrama = resp.data.data
-    //       console.log(this.mangasDrama);
-    //       this.loading = false
-    //   })
-    //   .catch(err => {
-    //       console.error(err);
-    //   });
-    // },
-  },
   mounted () {
-    // this.fetchRecent()
     this.mangaStore.initFetchHome()
-    // this.fetchDrama()
   }
 }
 </script>

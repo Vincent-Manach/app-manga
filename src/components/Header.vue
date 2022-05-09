@@ -1,15 +1,4 @@
 <template>
-  <!-- <div id="headerCard"> -->
-<!--Floating buttons -->
-  <!-- <ion-fab vertical="start" horizontal="start">
-    <ion-fab-button>
-      <ion-icon id="settingsIcon" :icon="settingsOutline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="end">
-      <ion-fab-button><ion-icon :icon="logoTwitter"></ion-icon></ion-fab-button>
-      <ion-fab-button><ion-icon :icon="logoInstagram"></ion-icon></ion-fab-button>
-    </ion-fab-list>
-  </ion-fab> -->
   <div class="header">
     <h1>Mang'App</h1>
 
@@ -65,7 +54,6 @@ import {
   homeOutline,
   logInOutline,
   logOutOutline,
-  // settingsOutline,
   share
 } from 'ionicons/icons';
 
@@ -86,7 +74,6 @@ export default defineComponent({
     IonTabButton,
     IonFab, 
     IonFabButton, 
-    // IonFabList,
     IonRouterOutlet,
     IonIcon
   },
@@ -102,7 +89,6 @@ export default defineComponent({
       homeOutline,
       logInOutline,
       logOutOutline,
-      // settingsOutline,
       share,
       userStore
     }
@@ -134,19 +120,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    // axios.get('https://api.mangadex.org/auth/check', {
-    //   headers: {
-    //     'Authorization':`Bearer ${token}`
-    //   }
-    // })
-    // .then(res => {
-    //   console.log(res.data.data)
-    //     // this.user = res.data.data
-    //     // console.log(this.user)
-    // })
-    // .catch(err => {
-    //     console.error(err);
-    // });
+    // check if logged
     window.addEventListener('localstorage-changed', () => {
       if (localStorage.getItem('token')) {
         this.logged = true

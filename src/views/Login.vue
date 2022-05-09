@@ -1,12 +1,7 @@
-@ts-nocheck
-
 <template>
   <ion-page>    
     <ion-content :fullscreen="true">    
       <div id="container">
-        <div class="logo">
-          <!-- <img src="../../../public/assets/img/logotest.png" alt="logo"> -->
-        </div>
         <div id="login">
           <h2>Log In</h2>
           <br/>
@@ -29,8 +24,6 @@
 <script lang="ts">
 import { IonContent, IonPage, IonInput, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
-// import axios from 'axios';
-// import jwtDecode from "jwt-decode";
 import { useUserStore } from '@/stores/user.store';
 
 export default defineComponent({
