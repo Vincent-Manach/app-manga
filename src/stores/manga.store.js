@@ -48,6 +48,10 @@ export const useMangaStore = defineStore({
             await axios.get('https://api.mangadex.org/manga?availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
               params: {
                 limit: 10
+              },
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(resp => {
@@ -63,6 +67,10 @@ export const useMangaStore = defineStore({
             await axios.get('https://api.mangadex.org/manga?includedTags[]=391b0423-d847-456f-aff0-8b0cfc03066b&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
               params: {
                 limit: 10
+              },
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(resp => {
@@ -77,6 +85,10 @@ export const useMangaStore = defineStore({
             await axios.get('https://api.mangadex.org/manga?includedTags[]=87cc87cd-a395-47af-b27a-93258283bbc6&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
               params: {
                 limit: 10
+              },
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(resp => {
@@ -91,6 +103,10 @@ export const useMangaStore = defineStore({
             await axios.get('https://api.mangadex.org/manga?includedTags[]=b9af3a63-f058-46de-a9a0-e0c13906197a&availableTranslatedLanguage[]=en&order[latestUploadedChapter]=desc', {
               params: {
                 limit: 10
+              },
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(resp => {
@@ -105,7 +121,10 @@ export const useMangaStore = defineStore({
         async searchData (data) {
             this.loadingResults = true
             await axios.get(`https://api.mangadex.org/manga/?title=${data}`, {
-            
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
+                }
             })
             .then(resp => {
                 this.results = resp.data.data
@@ -120,7 +139,9 @@ export const useMangaStore = defineStore({
             const token = localStorage.getItem('token')
             await axios.get('https://api.mangadex.org/user/follows/manga', {
               headers: {
-                'Authorization':`Bearer ${token}`
+                'Authorization':`Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(res => {
@@ -137,7 +158,9 @@ export const useMangaStore = defineStore({
             const token = localStorage.getItem('token')
             await axios.get(`https://api.mangadex.org/manga/${mangaId}/status`, {
               headers: {
-                'Authorization':`Bearer ${token}`
+                'Authorization':`Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE"
               }
             })
             .then(resp => {
